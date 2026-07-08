@@ -1,8 +1,11 @@
 namespace MCTUtils.CommunityStandards.Common;
 
+using System.Text.Json.Serialization;
+
 /// <summary>
 /// Ordered sequence of waypoints for a single asset.
 /// </summary>
+[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
 public class Route
 {
     /// <summary>

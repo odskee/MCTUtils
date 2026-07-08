@@ -1,12 +1,14 @@
 namespace MCTUtils.CommunityStandards.CommunityFlightPlan;
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using MCTUtils.CommunityStandards.Common;
 using MCTUtils.CommunityStandards.Serialization;
 
 /// <summary>
 /// Community standard schema for simulated military themes flight plans.
 /// </summary>
+[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
 public class CommunityFlightPlan
 {
     /// <summary>

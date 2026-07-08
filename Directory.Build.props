@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup>
+
+    <Authors>Tom Bedford</Authors>
+    <Company>MCT</Company>
+    <Copyright>Copyright © Tom Bedford</Copyright>
+
+    <RepositoryUrl>https://github.com/odskee/MCTUtils</RepositoryUrl>
+    <RepositoryBranch>master</RepositoryBranch>
+    <RepositoryType>git</RepositoryType>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+  </PropertyGroup>
+
+</Project>

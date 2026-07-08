@@ -1,6 +1,7 @@
 namespace MCTUtils.CommunityStandards.OpTaskAir;
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using MCTUtils.CommunityStandards.Common;
 using MCTUtils.CommunityStandards.Serialization;
 
@@ -8,6 +9,7 @@ using MCTUtils.CommunityStandards.Serialization;
 /// Community standard schema for a simulation Op Task Air.
 /// Describes the environment along with who is present and their intended plan.
 /// </summary>
+[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
 public class OpTaskAir
 {
     /// <summary>

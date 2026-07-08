@@ -31,7 +31,6 @@ namespace MCTUtils.CommunityStandards.Serialization;
                 PropertyNamingPolicy = null, // Preserve JsonPropertyName values
                 WriteIndented = writeIndented,
                 DefaultIgnoreCondition = JsonIgnoreCondition.Never,
-                PreferredObjectCreationHandling = JsonObjectCreationHandling.Populate,
                 Converters =
                 {
                     new EnumMemberJsonConverterFactory()
