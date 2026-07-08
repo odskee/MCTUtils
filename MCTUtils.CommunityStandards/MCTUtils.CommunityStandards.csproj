@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Title>MCTUtils.CommunityStandards</Title>
+    <Authors>MCTUtils, Odskee</Authors>
+    <Description>Community Standards schema support for MCTUtils. Provides models, serialization, and validation for Community Flight Plans and Operational Air Tasks.</Description>
+    <Copyright>MCT</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>DCS, Flightsim, Community Standards, Flight Plan</PackageTags>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <IncludeSymbols>False</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/odskee/MCTUtils</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" Version="9.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MCTUtils\MCTUtils.csproj" />
+  </ItemGroup>
+
+</Project>

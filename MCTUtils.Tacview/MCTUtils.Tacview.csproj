@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Title>MCTUtils.Tacview</Title>
+    <Authors>MCTUtils, Odskee</Authors>
+    <Description>Tacview Real-Time Telemetry support for MCTUtils. Provides real-time telemetry client, networking, and Tacview protocol helpers.</Description>
+    <Copyright>MCT</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>DCS, Flightsim, Tacview, Telemetry, ACMI</PackageTags>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <IncludeSymbols>False</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/odskee/MCTUtils</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Hashing" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MCTUtils\MCTUtils.csproj" />
+  </ItemGroup>
+
+</Project>

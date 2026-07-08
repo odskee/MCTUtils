@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Title>MCTUtils</Title>
+    <Authors>$(AssemblyName), Odskee</Authors>
+    <Description>Core library for MCTUtils — a .NET toolkit for military and civilian flight simulation software. Provides geographic utilities, airspeed conversion, Lua table parsing, and DCS terrain support. Extend with MCTUtils.Tacview and MCTUtils.CommunityStandards.</Description>
+    <Copyright>MCT</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>DCS, Flightsim, Lua, Airspeed, Geo, Aviation</PackageTags>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <IncludeSymbols>False</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/odskee/MCTUtils</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackAsTool>False</PackAsTool>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Proj4Net.Core" Version="2.26.2401" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="True" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

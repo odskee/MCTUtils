@@ -1,0 +1,36 @@
+namespace MCTUtils.CommunityStandards.Common;
+
+public enum MissionType
+{
+    [EnumMember(Value = "AAR")] AAR,
+    [EnumMember(Value = "AI")] AI,
+    [EnumMember(Value = "Airlift")] Airlift,
+    [EnumMember(Value = "AIRMOBILE")] Airmobile,
+    [EnumMember(Value = "AMBUSHCAP")] AmbushCap,
+    [EnumMember(Value = "ASUW")] Asuw,
+    [EnumMember(Value = "ASW")] Asw,
+    [EnumMember(Value = "AWACS")] Awacs,
+    [EnumMember(Value = "BAI")] Bai,
+    [EnumMember(Value = "BARCAP")] BarCap,
+    [EnumMember(Value = "CAP")] Cap,
+    [EnumMember(Value = "CAS")] Cas,
+    [EnumMember(Value = "CAS_ON_CALL")] CasOnCall,
+    [EnumMember(Value = "DCA")] Dca,
+    [EnumMember(Value = "DEAD")] Dead,
+    [EnumMember(Value = "ESCORT")] Escort,
+    [EnumMember(Value = "FAC(A)")] FacA,
+    [EnumMember(Value = "HAVCAP")] HavCap,
+    [EnumMember(Value = "INTERDICTION")] Interdiction,
+    [EnumMember(Value = "INTERCEPT")] Intercept,
+    [EnumMember(Value = "OCA_STRIKE")] OcaStrike,
+    [EnumMember(Value = "RESCAP")] ResCap,
+    [EnumMember(Value = "RECON")] Recon,
+    [EnumMember(Value = "SEAD")] Sead,
+    [EnumMember(Value = "STEALTH")] Stealth,
+    [EnumMember(Value = "STRIKE")] Strike,
+    [EnumMember(Value = "TARCAP")] TarCap,
+    [EnumMember(Value = "TASMO")] Tasmo,
+    [EnumMember(Value = "TRAINING")] Training,
+    [EnumMember(Value = "TRANSPORT")] Transport,
+    [EnumMember(Value = "OTHER")] Other
+}
