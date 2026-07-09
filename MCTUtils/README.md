@@ -242,17 +242,17 @@ using Proj4Net.Core;
 
 var env = new DCSEnvironment(new TheatreTranslation
 {
-    Central_meridian = 33,
-    Scale_factor = 0.9996,
-    False_easting = 500000,
-    False_northing = 0
+    Central_meridian = 147,
+    False_northing = -1491840.000000048,
+    False_easting = 238417.99999989968,
+    Scale_factor = 0.9996
 });
 
 // DCS → lat/lon
-var coord = env.DCSVec2ToDecimalDegrees(new Vec2(500000, 5000000));
+var coord = env.DCSVec2ToDecimalDegrees(new Vec2(13056.832576364, 10030.962119321));    // BasicCoordinate(){ Latitude=13.576672104045052, Longitude=144.91731189173802 }
 
 // lat/lon → DCS
-var dcsVec = env.DecimalDegreesToDCSVec2(new Coordinate(42.0, 33.0));
+var dcsVec = env.DecimalDegreesToDCSVec2(new Coordinate(13.576672104045052, 144.91731189173802));   // Vec2(){ X=13056.832576364, Y=10030.962119321 }
 ```
 
 ---
