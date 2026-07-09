@@ -7,7 +7,6 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <PackageId>MCTUtils</PackageId>
-    <Version>0.1.0</Version>
     <Title>MCTUtils</Title>
     <Description>Core library for MCTUtils — a .NET toolkit for military and civilian flight simulation software. Provides geographic utilities, airspeed conversion, Lua table parsing, and DCS terrain support. Extend with MCTUtils.Tacview and MCTUtils.CommunityStandards.</Description>
     <NeutralLanguage>en-GB</NeutralLanguage>

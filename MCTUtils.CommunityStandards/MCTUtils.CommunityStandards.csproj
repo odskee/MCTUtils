@@ -7,7 +7,6 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <PackageId>MCTUtils.CommunityStandards</PackageId>
-    <Version>0.1.0</Version>
     <Title>MCTUtils.CommunityStandards</Title>
     <Description>Community Standards schema support for MCTUtils. Provides models, serialization, and validation for Community Flight Plans and Operational Air Tasks.</Description>
     <NeutralLanguage>en-GB</NeutralLanguage>

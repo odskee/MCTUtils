@@ -7,7 +7,6 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <PackageId>MCTUtils.Tacview</PackageId>
-    <Version>0.1.0</Version>
     <Title>MCTUtils.Tacview</Title>
     <Description>Tacview Real-Time Telemetry support for MCTUtils. Provides real-time telemetry client, networking, and Tacview protocol helpers.</Description>
     <NeutralLanguage>en-GB</NeutralLanguage>

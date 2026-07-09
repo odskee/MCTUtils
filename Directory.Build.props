@@ -10,6 +10,7 @@
     <RepositoryBranch>master</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
 
+    <Version>0.2.6</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -23,4 +24,18 @@
 
   </PropertyGroup>
 
+  <Target Name="CopyNuGetPackagesToRoot" AfterTargets="Pack" Condition="'$(IsPackable)' != 'false'">
+    <ItemGroup>
+      <_NuGetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />
+      <_NuGetSymbols Include="$(ProjectDir)bin\$(Configuration)\*.snupkg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_NuGetPackages);@(_NuGetSymbols)" DestinationFolder="$(MSBuildThisFileDirectory)..\" />
+    <Message Text="Copied $(PackageId).$(PackageVersion).nupkg/snupkg to $(MSBuildThisFileDirectory)..\" Importance="High" />
+  </Target>
+
 </Project>
+
+
+
+
+

@@ -7,7 +7,7 @@ namespace MCTUtils.DCS
 {
     public class DCSEnvironment
     {
-        private readonly string dCSProjectionString = "`+proj=tmerc +lat_0=0 +lon_0=${c_value} +k_0=${s_value} +x_0=${e_value} +y_0=${n_value} +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +ellps=WGS84 +no_defs`";
+        private string dCSProjectionString = "+proj=tmerc +lat_0=0 +lon_0={c_value} +k_0={s_value} +x_0={e_value} +y_0={n_value} +units=m +ellps=WGS84";
 
         private readonly TheatreTranslation? theatreTranslation;
         
@@ -19,12 +19,19 @@ namespace MCTUtils.DCS
         private readonly ICoordinateTransform toDCSTransform;
 
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DCSEnvironment"/> class with the specified theatre translation parameters.
         /// </summary>
         /// <param name="translation"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public DCSEnvironment(TheatreTranslation translation)
         {
+            if (translation == null)
+            {
+                throw new InvalidOperationException("Theatre translation parameters have not been set. Please call SetTranslationParameters() before converting coordinates.");
+            }
+
             theatreTranslation = translation;
 
             dcsCrs = crsFactory.CreateFromParameters(

@@ -9,7 +9,7 @@ dotnet add package MCTUtils
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.1.0 |
+| **Version** | 0.2.6 |
 | **License** | [LICENSE.txt](LICENSE.txt) |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -452,3 +452,8 @@ VOR, VORDME, VORTAC, TACAN, DME, NDB, NDBDME, VOT, Radar
 | `MCTUtils` | Core library — geo, airspeed, Lua, DCS terrain, utilities, GPX parsing |
 | `MCTUtils.Tacview` | Tacview Real-Time Telemetry client and protocol helpers |
 | `MCTUtils.CommunityStandards` | Community Flight Plan & Op Task Air schemas |
+
+
+
+
+
