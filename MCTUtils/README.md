@@ -1,6 +1,6 @@
 # MCTUtils
 
-Milsim Coordination Toolbox - A Core library for the MCTUtils .NET toolkit — geographic utilities, airspeed conversion, Lua table parsing, DCS terrain projection, and shared types for flight simulation tooling.
+A Core library for the MCTUtils .NET toolkit — geographic utilities, airspeed conversion, Lua table parsing, DCS terrain projection, and shared types for flight simulation tooling.
 
 ```
 dotnet add package MCTUtils
@@ -339,7 +339,6 @@ Barycentric coordinates within a triangle.
 | Method | Return | Description |
 |--------|--------|-------------|
 | `MakeSafeWindowsFileName(string value, string replaceWith)` | `string` | Replaces `<>:"/\|?*` with replacement char |
-| `TruncateDouble(double? value, int digits)` | `double` | Truncates to N decimal places (no rounding) |
 
 ### `Phonetics` (static)
 

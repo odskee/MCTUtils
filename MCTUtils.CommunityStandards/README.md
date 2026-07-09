@@ -1,6 +1,8 @@
 # MCTUtils.CommunityStandards
 
 Models, serialization, and validation for the MCT Community Standards schemas — Community Flight Plans and Operational Air Tasks used by the DCS milsim community.
+* Op Task Air - https://mctoolbox.uk/schema/v1.1.0/op-task-air.schema.json
+* Flight Plan - https://mctoolbox.uk/schema/v1.1.0/community-flightplan.schema.json
 
 ```
 dotnet add package MCTUtils.CommunityStandards

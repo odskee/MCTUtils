@@ -24,17 +24,6 @@ public static class CommonUtilities
                     .Replace("*", replaceWith);
     }
 
-    /// <summary>
-    /// Truncates a nullable double to the specified number of decimal places without rounding.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="digits"></param>
-    /// <returns>The truncated double value</returns>
-    public static double TruncateDouble(double? value, int digits)
-    {
-        double mult = Math.Pow(10.0, digits);
-        return Math.Truncate(value ?? 0 * mult) / mult;
-    }
 
 
 
