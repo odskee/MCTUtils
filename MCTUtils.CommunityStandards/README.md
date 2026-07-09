@@ -17,7 +17,7 @@ dotnet add package MCTUtils.CommunityStandards
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.3.0 |
+| **Version** | 0.3.2 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -255,10 +255,10 @@ Annotated with `[JsonObjectCreationHandling(Populate)]`.
 | `Callsign` | `string` | `callsign` | Flight callsign |
 | `TacticalCallsign` | `string?` | `tactical_callsign` | Tactical callsign |
 | `FlightNumber` | `int` | `flight_number` | Expected flight members |
-| `FlightType` | `FlightType?` | `flightType` | ICAO flight type |
-| `FlightRules` | `FlightRules?` | `flightRules` | ICAO flight rules |
-| `FlightOversight` | `FlightOversight?` | `flightOversight` | Flight visibility |
-| `FlightMember` | `FlightMember?` | `flight_member` | Pilot info |
+| `FlightType` | `FlightType?` | `flight_type` | ICAO flight type |
+| `FlightRules` | `FlightRules?` | `flight_rules` | ICAO flight rules |
+| `FlightOversight` | `FlightOversight?` | `flight_oversight` | Flight visibility |
+| `FlightMembers` | `List<FlightMember>?` | `flight_members` | Pilot info |
 | `Airframe` | `string` | `airframe` | Aircraft type (e.g. `"F-16CM"`) |
 | `MissionType` | `MissionType` | `mission_type` | Mission type |
 | `PrimaryTarget` | `string?` | `primary_target` | Target description |
@@ -724,9 +724,15 @@ var clone = opTaskAir.DeepClone();
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 0.3.0 | Shared types and serialization infrastructure (ProjectReference) |
+| MCTUtils | 0.3.2 | Shared types and serialization infrastructure (ProjectReference) |
 | JsonSchema.Net | 9.2.2 | JSON Schema evaluation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
+
+
+
+
+
 
 
 

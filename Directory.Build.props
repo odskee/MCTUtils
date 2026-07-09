@@ -9,7 +9,7 @@
     <RepositoryBranch>master</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
 
-    <Version>0.3.0</Version>
+    <Version>0.3.2</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -33,6 +33,12 @@
   </Target>
 
 </Project>
+
+
+
+
+
+
 
 
 

@@ -34,13 +34,13 @@ public class OpTaskAir
     /// ISO 8601 UTC timestamp of when this plan was first created.
     /// </summary>
     [JsonPropertyName("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// ISO 8601 UTC timestamp of the last modification.
     /// </summary>
     [JsonPropertyName("updated_at")]
-    public DateTimeOffset? UpdatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Free-form user-agent string identifying the tool and version that produced this file.

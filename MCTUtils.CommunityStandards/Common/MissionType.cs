@@ -1,5 +1,7 @@
 namespace MCTUtils.CommunityStandards.Common;
 
+
+
 public enum MissionType
 {
     [EnumMember(Value = "AAR")] AAR,
@@ -20,6 +22,7 @@ public enum MissionType
     [EnumMember(Value = "ESCORT")] Escort,
     [EnumMember(Value = "FAC(A)")] FacA,
     [EnumMember(Value = "HAVCAP")] HavCap,
+    [EnumMember(Value = "NUCLEAR")] Nucelar,
     [EnumMember(Value = "INTERDICTION")] Interdiction,
     [EnumMember(Value = "INTERCEPT")] Intercept,
     [EnumMember(Value = "OCA_STRIKE")] OcaStrike,
@@ -34,3 +37,39 @@ public enum MissionType
     [EnumMember(Value = "TRANSPORT")] Transport,
     [EnumMember(Value = "OTHER")] Other
 }
+
+// TODO: Merge the following in
+//public readonly Dictionary<MissionType, string> MissionTypeDescriptions = new()
+//{
+//    { MissionType.AAR, "Air-to-Air Refueling" },
+//    { MissionType.AI, "Air Interdiction" },
+//    { MissionType.Airlift, "Airlift of infantry / ground assets to a different location" },
+//    { MissionType.Airmobile, "Airlift of infantry / ground assets to a different location" },
+//    { MissionType.AmbushCap, "Ambush Combat Air Patrol" },
+//    { MissionType.Asuw, "Anti-Surface Warfare" },
+//    { MissionType.Awacs, "Airborne Early Warning Control"},
+//    { MissionType.Bai, "Battlefield Air Interdiction"},
+//    { MissionType.BarCap, "Barrier CAP"},
+//    { MissionType.Cap, "General Combat Air Patrol" },
+//    { MissionType.Cas, "Close Air Support" },
+//    { MissionType.CasOnCall, "Close Air Support if / as required" },
+//    { MissionType.Dca, "Defensive Counter Air"},
+//    { MissionType.Dead, "Denial of Enemy Air Defences"},
+//    { MissionType.Escort, "Escort for friendly flight(s)"},
+//    { MissionType.FacA, "Forward Air Controller (Airborne)"},
+//    { MissionType.HavCap, "High Asset Value CAP"},
+//    { MissionType.Nucelar, "Asset involved in the transport and / or deployment of nuclear weapons"},
+//    { MissionType.Interdiction, "Enemy ground reinforcement disruption"},
+//    { MissionType.Intercept, "Interception of specific enemy or unidentified airborne contact"},
+//    { MissionType.OcaStrike, "Offensive Counter Air Strike"},
+//    { MissionType.Other, "Non defined task not covered by other options"},
+//    { MissionType.ResCap, "Rescue CAP"},
+//    { MissionType.Recon, "Reconnaissance and BDA flights"},
+//    { MissionType.Sead, "Suppression of Enemy Air Defenses"},
+//    { MissionType.Stealth, "Stealth capable aircraft operating behind enemy lines"},
+//    { MissionType.Strike, "Strike on specific ground target(s)"},
+//    { MissionType.TarCap, "Target Combat Air Patrol"},
+//    { MissionType.Tasmo, "Tactical Air Support for Maritime Operations"},
+//    { MissionType.Training, "Training flight comprising one or more tasks in non-combat operations"},
+//    { MissionType.Transport, "Transport of supplies (non-infantry) to selected point"}
+//};

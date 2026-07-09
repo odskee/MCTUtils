@@ -15,8 +15,8 @@ dotnet add package MCTUtils
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.3.0 |
-| **License** | [LICENSE.txt](LICENSE.txt) |
+| **Version** | 0.3.2 |
+| **License** | [LICENSE](LICENSE) |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
 | **Debugging** | SourceLink support — step into MCTUtils from your IDE |
@@ -345,6 +345,10 @@ Barycentric coordinates within a triangle.
 | Method | Return | Description |
 |--------|--------|-------------|
 | `MakeSafeWindowsFileName(string value, string replaceWith)` | `string` | Replaces `<>:"/\|?*` with replacement char |
+| `TryFindEnum<TEnum>(string value, out TEnum result)` | `bool` | Case-insensitive enum parse; returns `true` + result on match |
+| `FindEnumByString<TEnum>(string value)` | `TEnum?` | Case-insensitive enum parse; returns the enum value or `null` |
+
+**Constraints:** `TEnum` must be `struct, Enum` on both methods.
 
 ### `Phonetics` (static)
 
@@ -458,6 +462,12 @@ VOR, VORDME, VORTAC, TACAN, DME, NDB, NDBDME, VOT, Radar
 | `MCTUtils` | Core library — geo, airspeed, Lua, DCS terrain, utilities, GPX parsing |
 | `MCTUtils.Tacview` | Tacview Real-Time Telemetry client and protocol helpers |
 | `MCTUtils.CommunityStandards` | Community Flight Plan & Op Task Air schemas |
+
+
+
+
+
+
 
 
 

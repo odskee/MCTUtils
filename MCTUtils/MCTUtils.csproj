@@ -13,7 +13,7 @@
     <PackageTags>DCS, Flightsim, Lua, Airspeed, Geo, Aviation</PackageTags>
     <PackageProjectUrl>https://github.com/odskee/MCTUtils</PackageProjectUrl>
 
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <PackageReleaseNotes>
@@ -29,7 +29,7 @@ Initial public release.
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="LICENSE" Pack="true" PackagePath="" />
     <None Include="README.md" Pack="True" PackagePath="\" />
     <None Include="..\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>

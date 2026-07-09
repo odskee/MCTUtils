@@ -38,26 +38,32 @@ public class Asset
     /// <summary>
     /// ICAO Compliant Flight Type value.
     /// </summary>
-    [JsonPropertyName("flightType")]
+    [JsonPropertyName("flight_type")]
     public FlightType? FlightType { get; set; }
 
     /// <summary>
     /// ICAO Compliant Flight Rules value.
     /// </summary>
-    [JsonPropertyName("flightRules")]
+    [JsonPropertyName("flight_rules")]
     public FlightRules? FlightRules { get; set; }
 
     /// <summary>
     /// Flight environment visibility.
     /// </summary>
-    [JsonPropertyName("flightOversight")]
+    [JsonPropertyName("flight_oversight")]
     public FlightOversight? FlightOversight { get; set; }
+
+    /// <summary>
+    /// Flight control type.
+    /// </summary>
+    [JsonPropertyName("control_type")]
+    public ControlType? ControlType { get; set; }
 
     /// <summary>
     /// Flight member information.
     /// </summary>
-    [JsonPropertyName("flight_member")]
-    public FlightMember? FlightMember { get; set; }
+    [JsonPropertyName("flight_members")]
+    public List<FlightMember>? FlightMembers { get; set; }
 
     /// <summary>
     /// Aircraft type designation (e.g. 'F-16CM', 'F/A-18C').

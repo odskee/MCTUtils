@@ -78,5 +78,4 @@ public static class MCTExtensions
         return copy.GetRange(0, number);
     }
 
-
 }
