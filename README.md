@@ -1,10 +1,11 @@
 # MCTUtils
-This is a collection of tools and utilities to help develop for the flight/milsim community; with a particular focus on DCS and MSFS.
+
+Milsim Community Tools & Utils - This is a collection of tools and utilities to help develop for the flight/milsim community; with a particular focus on DCS.
 
 <br />
 
 ## Overview
-MCTUtils is split into a number of projects, with MCTUtils containing a number of commonly used converters and processors.  Additional / optional sub-componentes are available for a number of specific areas.
+MCTUtils is a parent library, containing a number of commonly used converters and processors.  Additional / optional libraries that depend on MCTUtils are available such as MCTUtils.Tacview.
 
 ### MCTTUtils
 See https://github.com/odskee/MCTUtils/tree/master/MCTUtils for more information.
@@ -17,6 +18,6 @@ See https://github.com/odskee/MCTUtils/tree/master/MCTUtils.CommunityStandards f
 
 <br /> <br />
 ## To Do
-* Fix current implementation of Coordinate space translation
 * Add MCTUtils.MCTLibrary
+* Add MCTUtils.MCTAPI
 * Add MCTUtils.DCS-DTC (while EOL, still a useful collection of features)

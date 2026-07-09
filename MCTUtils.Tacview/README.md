@@ -6,16 +6,90 @@ Tacview Real-Time Telemetry support for MCTUtils. Connects to Tacview telemetry 
 dotnet add package MCTUtils.Tacview
 ```
 
-Requires the `MCTUtils` core package (added automatically as a dependency).
+| | |
+|---|---|
+| **Target** | .NET 8 |
+| **Version** | 0.1.0 |
+| **Dependency** | MCTUtils (core) — added automatically |
+| **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
+| **IntelliSense** | Full XML docs for all public APIs |
+| **Debugging** | SourceLink support |
 
-## DCSRealTimeTelemetry
+---
 
-Connect to a Tacview Real-Time Telemetry source and receive ACMI lines as they arrive.
+## Namespace: `MCTUtils.Tacview`
+
+Two public types:
+
+- `TacviewHash` — CRC32 password hash computation
+- `DCSRealTimeTelemetry` — TCP telemetry client
+
+---
+
+## `TacviewHash` (static)
+
+Computes CRC32 password hashes for Tacview protocol authentication using `System.IO.Hashing.Crc32`.
+
+| Method | Return | Description |
+|--------|--------|-------------|
+| `MakePasswordHash(string password)` | `string` | CRC32 of UTF-16LE encoded string. Returns `"0"` for empty/null. |
+| `MakePasswordHash(byte[] password)` | `string` | CRC32 of raw byte array. Returns `"0"` for empty. |
 
 ```csharp
 using MCTUtils.Tacview;
 
-var telemetry = new DCSRealTimeTelemetry(
+string hash = TacviewHash.MakePasswordHash("myPassword");
+string hashFromBytes = TacviewHash.MakePasswordHash(
+    Encoding.Unicode.GetBytes("myPassword"));
+```
+
+---
+
+## `DCSRealTimeTelemetry` (class, implements `IAsyncDisposable`)
+
+TCP client for connecting to a Tacview Real-Time Telemetry source, performing the handshake, and reading ACMI data lines as they arrive.
+
+### Constructor
+
+| Constructor | Description |
+|-------------|-------------|
+| `DCSRealTimeTelemetry(string Host, int Port = 42674, string ClientName = "", string Password = "")` | Creates a new telemetry client. Empty client name falls back to the entry assembly name. Empty password produces hash `"0"`. |
+
+### Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `IsConnected` | `bool` | Whether the TCP connection is currently established |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `LineReceivedEvent` | `Action<string>?` | Fires for each complete ACMI line (delimited by `\n`) |
+| `DisconnectedEvent` | `Action<Exception>?` | Fires when the remote host closes the connection or an error occurs |
+
+### Methods
+
+| Method | Return | Description |
+|--------|--------|-------------|
+| `ConnectToTelemetrySourceAsync(CancellationToken token)` | `Task` | Connects, performs handshake, starts read loop. **Requires** both events to be subscribed. |
+| `GetConnectionTime()` | `TimeSpan?` | Time elapsed since connection, or null if not connected |
+| `GetConnectionDurationSeconds()` | `int` | Connection duration in seconds (rounded) |
+| `DisposeAsync()` | `ValueTask` | Cancels read loop, closes TCP connection, disposes resources |
+
+### Exceptions
+
+| Exception | Condition |
+|-----------|-----------|
+| `EventConfigurationMismatchException` | `ConnectToTelemetrySourceAsync()` called without subscribing to both events |
+| `PasswordNotAcceptedException` | Handshake failed — remote host closed connection |
+
+### Complete Example
+
+```csharp
+using MCTUtils.Tacview;
+
+await using var telemetry = new DCSRealTimeTelemetry(
     host: "192.168.1.100",
     port: 42674,
     clientName: "MyAnalyzer",
@@ -31,39 +105,34 @@ telemetry.DisconnectedEvent += ex =>
     Console.WriteLine($"Disconnected: {ex.Message}");
 };
 
-await telemetry.ConnectToTelemetrySourceAsync();
+try
+{
+    await telemetry.ConnectToTelemetrySourceAsync();
+    Console.WriteLine($"Connected for {telemetry.GetConnectionDurationSeconds()}s");
 
-// ... later ...
-Console.WriteLine($"Connected for {telemetry.GetConnectionDurationSeconds()}s");
-await telemetry.DisposeAsync();
+    // Keep running — events fire on background thread
+    await Task.Delay(TimeSpan.FromMinutes(5));
+}
+catch (EventConfigurationMismatchException ex)
+{
+    // Events not subscribed
+}
+catch (PasswordNotAcceptedException ex)
+{
+    // Bad password
+}
+catch (SocketException ex)
+{
+    // Connection failed
+}
 ```
 
-### Events
-
-| Event | Description |
-|-------|-------------|
-| `LineReceivedEvent` | Fires for each complete ACMI line received |
-| `DisconnectedEvent` | Fires when the remote host closes the connection or an error occurs |
-
-## TacviewHash
-
-Compute CRC32 password hashes for Tacview protocol authentication.
-
-```csharp
-using MCTUtils.Tacview;
-
-string hash = TacviewHash.MakePasswordHash("myPassword");
-// Returns CRC32 hex (lowercase) or "0" for empty passwords
-```
-
-### Methods
-
-| Method | Description |
-|--------|-------------|
-| `MakePasswordHash(string)` | CRC32 of UTF-16LE encoded string |
-| `MakePasswordHash(byte[])` | CRC32 of raw byte array |
+---
 
 ## Dependencies
 
-- **MCTUtils** (core) — exceptions and shared types
-- **System.IO.Hashing** — CRC32 hash computation
+| Package | Version | Usage |
+|---------|---------|-------|
+| MCTUtils | 0.1.0 | Shared exceptions and types (ProjectReference) |
+| System.IO.Hashing | 8.0.0 | CRC32 hash computation |
+| Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |

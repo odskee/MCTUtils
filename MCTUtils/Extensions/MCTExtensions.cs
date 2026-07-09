@@ -1,6 +1,6 @@
 namespace MCTUtils;
 
-internal static class MCTExtensions
+public static class MCTExtensions
 {
     /// <summary>
     /// Converts the first character of a string to uppercase.

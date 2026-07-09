@@ -7,46 +7,78 @@ namespace MCTUtils.DCS
 {
     public class DCSEnvironment
     {
-        private readonly string dCSProjectionString = "`+proj=tmerc +lat_0=0 +lon_0=${c_value} +k_0=${s_value} +x_0=${e_value} +y_0=${n_value} +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +ellps=WGS84 +no_defs +axis=neu`";
+        private readonly string dCSProjectionString = "`+proj=tmerc +lat_0=0 +lon_0=${c_value} +k_0=${s_value} +x_0=${e_value} +y_0=${n_value} +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +ellps=WGS84 +no_defs`";
 
-        private TheatreTranslation? theatreTranslation;
+        private readonly TheatreTranslation? theatreTranslation;
+        
+        private readonly CoordinateReferenceSystemFactory crsFactory = new();
+        private readonly CoordinateTransformFactory ctFactory = new();
+        private readonly CoordinateReferenceSystem dcsCrs;
+        private readonly CoordinateReferenceSystem wgs84Crs;
+        private readonly ICoordinateTransform toGeoTransform;
+        private readonly ICoordinateTransform toDCSTransform;
 
 
         /// <summary>
-        /// Sets the translation parameters for the DCS environment using a TheatreTranslation object.
+        /// Initializes a new instance of the <see cref="DCSEnvironment"/> class with the specified theatre translation parameters.
         /// </summary>
-        /// <param name="Translation"></param>
-        public void SetTranslationParameters(TheatreTranslation Translation)
+        /// <param name="translation"></param>
+        public DCSEnvironment(TheatreTranslation translation)
         {
-            theatreTranslation = Translation;
+            theatreTranslation = translation;
+
+            dcsCrs = crsFactory.CreateFromParameters(
+                "DCS",
+                DCSProjectionString(
+                    translation.Central_meridian,
+                    translation.Scale_factor,
+                    translation.False_easting,
+                    translation.False_northing));
+
+            wgs84Crs = crsFactory.CreateFromName("EPSG:4326");
+
+            toGeoTransform = ctFactory.CreateTransform(dcsCrs, wgs84Crs);
+            toDCSTransform = ctFactory.CreateTransform(wgs84Crs, dcsCrs);
         }
+
+
+        /// <summary>
+        /// Converts a decimal degrees coordinate to a DCS Vec2 coordinate using the provided DCSTerrain translation parameters.
+        /// </summary>
+        /// <param name="coordinate"></param>
+        /// <returns>Vec2 object containing the DCS coordinates</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public Vec2 DecimalDegreesToDCSVec2(Coordinate coordinate)
+        {
+            if (toDCSTransform == null)
+            {
+                throw new InvalidOperationException("Theatre translation parameters have not been set. Please call SetTranslationParameters() before converting coordinates.");
+            }
+
+            Coordinate targetCoord = new Coordinate();
+            toDCSTransform.Transform(coordinate, targetCoord);
+            return new() { X = targetCoord.Y, Y = targetCoord.X };
+        }
+
 
 
         /// <summary>
         /// Converts a DCS Vec2 coordinate to decimal degrees using the provided DCSTerrain translation parameters.
         /// </summary>
         /// <param name="DCSVec2"></param>
-        /// <returns></returns>
+        /// <returns>BasicCoordinate object containing the decimal degrees</returns>
         /// <exception cref="InvalidOperationException"></exception>
         public BasicCoordinate DCSVec2ToDecimalDegrees(Vec2 DCSVec2)
         {
-            if (theatreTranslation == null)
+            if (toGeoTransform == null)
             {
                 throw new InvalidOperationException("Theatre translation parameters have not been set. Please call SetTranslationParameters() before converting coordinates.");
             }
 
-            BasicCoordinate resp = new();
-            CoordinateReferenceSystemFactory crsFactory = new();
-            CoordinateTransformFactory ctFactory = new();
-            var sourceCRS = crsFactory.CreateFromParameters("DCS", DCSProjectionString(theatreTranslation.Central_meridian, theatreTranslation.Scale_factor, theatreTranslation.False_easting, theatreTranslation.False_northing));
-            var targetCRS = crsFactory.CreateFromName("EPSG:3857");
-            var transform = ctFactory.CreateTransform(sourceCRS, targetCRS);
-            var sourceCoord = new Coordinate(DCSVec2.X, DCSVec2.Y);
-            var targetCoord = new Coordinate();
-            transform.Transform(sourceCoord, targetCoord);
-            resp.Latitidue = targetCoord.Y;
-            resp.Longtitude = targetCoord.X;
-            return resp;
+            Coordinate sourceCoord = new Coordinate(DCSVec2.Y, DCSVec2.X);
+            Coordinate targetCoord = new Coordinate();
+            toGeoTransform.Transform(sourceCoord, targetCoord);
+            return new() { Latitidue = targetCoord.Y, Longtitude = targetCoord.X };
         }
 
         /// <summary>
@@ -57,7 +89,7 @@ namespace MCTUtils.DCS
         /// <exception cref="InvalidOperationException"></exception>
         public BasicCoordinate DCSVec3ToDecimalDegrees(Vec3 DCSVec3)
         {
-            if (theatreTranslation == null)
+            if (toGeoTransform == null)
             {
                 throw new InvalidOperationException("Theatre translation parameters have not been set. Please call SetTranslationParameters() before converting coordinates.");
             }
