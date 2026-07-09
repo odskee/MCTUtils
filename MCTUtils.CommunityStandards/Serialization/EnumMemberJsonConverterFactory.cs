@@ -43,6 +43,14 @@ public class EnumMemberJsonConverterFactory : JsonConverterFactory
             }
         }
 
+
+        /// <summary>
+        /// Reads a JSON string and converts it to the enum type.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="typeToConvert"></param>
+        /// <param name="options"></param>
+        /// <exception cref="JsonException"></exception>
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var str = reader.GetString();
@@ -51,6 +59,12 @@ public class EnumMemberJsonConverterFactory : JsonConverterFactory
             throw new JsonException($"Unknown enum value '{str}' for type {typeof(T).Name}.");
         }
 
+        /// <summary>
+        /// Writes the enum value as a JSON string, using the <see cref="EnumMemberAttribute.Value"/> if present.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="value"></param>
+        /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             writer.WriteStringValue(ToJson[value]);

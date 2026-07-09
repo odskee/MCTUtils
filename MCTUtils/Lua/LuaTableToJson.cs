@@ -15,20 +15,14 @@ namespace MCTUtils.Lua
     /// </summary>
     public static class LuaTableToJson
     {
-        /// <summary>Convert a Lua source string and return a JSON string.</summary>
-        public static string Convert(string luaText, bool indented = false)
-        {
-            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(luaText));
-            using var outMs = new MemoryStream();
-            Convert(ms, outMs, indented);
-            return Encoding.UTF8.GetString(outMs.ToArray());
-        }
-
         /// <summary>
         /// Convert from an input <see cref="Stream"/> (read) to an output
         /// <see cref="Stream"/> (write).  Streams may be arbitrarily large;
         /// only one table node at a time is held in memory.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <param name="indented"></param>
         public static void Convert(Stream input, Stream output, bool indented = false)
         {
             using var reader = new StreamReader(input, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 65536, leaveOpen: true);
@@ -37,6 +31,9 @@ namespace MCTUtils.Lua
         }
 
         /// <summary>Convert from a <see cref="TextReader"/>.</summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <param name="indented"></param>
         public static void Convert(TextReader input, Stream output, bool indented = false)
         {
             var lexer = new Lexer(input);
@@ -49,8 +46,25 @@ namespace MCTUtils.Lua
             writer.Flush();
             output.Position = 0;    // Caller can read from the beginning of the output stream after
         }
+
+        /// <summary>
+        /// Convert from a string containing Lua table text to a JSON string.
+        /// </summary>
+        /// <param name="luaText"></param>
+        /// <param name="indented"></param>
+        /// <returns>string representing JSON</returns>
+        public static string Convert(string luaText, bool indented = false)
+        {
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(luaText));
+            using var outMs = new MemoryStream();
+            Convert(ms, outMs, indented);
+            return Encoding.UTF8.GetString(outMs.ToArray());
+        }
     }
 
+    /// <summary>
+    /// Abstract base class for a Lua value (string, number, boolean, nil, or table).
+    /// </summary>
     internal abstract class LuaValue
     {
         public abstract void WriteTo(Utf8JsonWriter w);
@@ -100,10 +114,18 @@ namespace MCTUtils.Lua
         public LuaValue Value { get; } = value;
     }
 
+
+    /// <summary>
+    /// A Lua table, which is a collection of <see cref="TableEntry"/> items.
+    /// </summary>
     internal sealed class LuaTable : LuaValue
     {
         private readonly List<TableEntry> _entries;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LuaTable"/> class with the specified entries.
+        /// </summary>
+        /// <param name="entries"></param>
         public LuaTable(List<TableEntry> entries) => _entries = entries;
 
         private enum TableKind
@@ -161,6 +183,11 @@ namespace MCTUtils.Lua
             return true;
         }
 
+        /// <summary>
+        /// Write this Lua table to a <see cref="Utf8JsonWriter"/> as JSON.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public override void WriteTo(Utf8JsonWriter w)
         {
             if (_entries.Count == 0)
@@ -386,7 +413,10 @@ namespace MCTUtils.Lua
 
 
 
-        // public token entry point
+        /// <summary>
+        /// Read the next token from the input stream.  Skips whitespace and comments.
+        /// </summary>
+        /// <returns>Token</returns>
         public Token Next()
         {
             while (true) // loop to retry after comments
@@ -770,19 +800,19 @@ namespace MCTUtils.Lua
             };
         }
 
-        private LuaValue ParseString()
+        private LuaString ParseString()
         {
             var t = Expect(TokenKind.String);
             return new LuaString(t.StringValue!);
         }
 
-        private LuaValue ParseInteger()
+        private LuaInteger ParseInteger()
         {
             var t = Expect(TokenKind.Integer);
             return new LuaInteger(t.IntValue);
         }
 
-        private LuaValue ParseFloat()
+        private LuaFloat ParseFloat()
         {
             var t = Expect(TokenKind.Float);
             return new LuaFloat(t.FloatValue);

@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace MCTUtils.Airspeed
 {
+    /// <summary>
+    /// Provides methods for converting between different airspeed types (IAS, CAS, EAS, TAS, Mach, GS) and calculating atmospheric properties based on altitude and METAR data.
+    /// </summary>
     public static class AirspeedConverter
     {
         // --- Constants ---
@@ -16,10 +19,27 @@ namespace MCTUtils.Airspeed
         private const double MpsToKts = 1.0 / KtsToMps;
 
 
+        /// <summary>
+        /// Converts Indicated Airspeed (IAS) to Calibrated Airspeed (CAS).
+        /// </summary>
+        /// <param name="ias"></param>
+        /// <returns>Calibrated Airspeed in knots</returns>
         public static double IASToCAS(double ias) => ias;
+
+        /// <summary>
+        /// Converts Calibrated Airspeed (CAS) to Indicated Airspeed (IAS).
+        /// </summary>
+        /// <param name="cas"></param>
+        /// <returns>Indicated Airspeed in knots</returns>
         public static double CASToIAS(double cas) => cas;
 
-        // CAS
+
+        /// <summary>
+        /// Converts Calibrated Airspeed (CAS) to Equivalent Airspeed (EAS) using the provided atmospheric state.
+        /// </summary>
+        /// <param name="casKnots"></param>
+        /// <param name="atm"></param>
+        /// <returns>Equivalent Airspeed in knots</returns>
         public static double CASToEAS(double casKnots, AtmosphereState atm)
         {
             double cas = casKnots * KtsToMps;
@@ -40,7 +60,12 @@ namespace MCTUtils.Airspeed
         }
 
 
-        // EAS 
+        /// <summary>
+        /// Converts Equivalent Airspeed (EAS) to Calibrated Airspeed (CAS) using the provided atmospheric state.
+        /// </summary>
+        /// <param name="easKnots"></param>
+        /// <param name="atm"></param>
+        /// <returns>Calibrated Airspeed in knots</returns>
         public static double EASToCAS(double easKnots, AtmosphereState atm)
         {
             double eas = easKnots * KtsToMps;
@@ -57,17 +82,38 @@ namespace MCTUtils.Airspeed
 
             return cas * MpsToKts;
         }
+
+        /// <summary>
+        /// Converts Equivalent Airspeed (EAS) to True Airspeed (TAS) using the provided atmospheric state.
+        /// </summary>
+        /// <param name="easKnots"></param>
+        /// <param name="atm"></param>
+        /// <returns>True Airspeed in knots</returns>
         public static double EASToTAS(double easKnots, AtmosphereState atm)
         {
             return easKnots * Math.Sqrt(Rho0 / atm.Density);
         }
 
 
-        // TAS
+        /// <summary>
+        /// Converts True Airspeed (TAS) to Equivalent Airspeed (EAS) using the provided atmospheric state.
+        /// </summary>
+        /// <param name="tasKnots"></param>
+        /// <param name="atm"></param>
+        /// <returns>Equivalent Airspeed in knots</returns>
         public static double TASToEAS(double tasKnots, AtmosphereState atm)
         {
             return tasKnots * Math.Sqrt(atm.Density / Rho0);
         }
+
+
+        /// <summary>
+        /// Converts True Airspeed (TAS) to Indicated Airspeed (IAS) at a given altitude and optional METAR data.
+        /// </summary>
+        /// <param name="tas"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Indicated Airspeed in knots</returns>
         public static double TASToIAS(double tas, double altitudeMeters, MetarData? metar = null)
         {
             var atm = GetAtmosphere(altitudeMeters, metar);
@@ -77,6 +123,16 @@ namespace MCTUtils.Airspeed
 
             return cas;
         }
+
+
+        /// <summary>
+        /// Converts True Airspeed (TAS) to Ground Speed (GS) given the heading, wind speed, and wind direction.
+        /// </summary>
+        /// <param name="tasKnots"></param>
+        /// <param name="headingDeg"></param>
+        /// <param name="windSpeedKnots"></param>
+        /// <param name="windDirDeg"></param>
+        /// <returns>Ground Speed in knots</returns>
         public static double TASToGS(double tasKnots, double headingDeg, double? windSpeedKnots = null, double? windDirDeg = null)
         {
             if (windSpeedKnots == null || windDirDeg == null)
@@ -84,20 +140,29 @@ namespace MCTUtils.Airspeed
                 return tasKnots; // no wind
             }
 
-            double tasX = tasKnots * Math.Cos(Angle.ConvertDegreesToRadians(headingDeg));
-            double tasY = tasKnots * Math.Sin(Angle.ConvertDegreesToRadians(headingDeg));
+            double tasX = tasKnots * Math.Cos(AnglesAndMeasurements.ConvertDegreesToRadians(headingDeg));
+            double tasY = tasKnots * Math.Sin(AnglesAndMeasurements.ConvertDegreesToRadians(headingDeg));
 
             // Convert "from" to "to"
             double windToDeg = (windDirDeg.Value + 180) % 360;
 
-            double windX = windSpeedKnots.Value * Math.Cos(Angle.ConvertDegreesToRadians(windToDeg));
-            double windY = windSpeedKnots.Value * Math.Sin(Angle.ConvertDegreesToRadians(windToDeg));
+            double windX = windSpeedKnots.Value * Math.Cos(AnglesAndMeasurements.ConvertDegreesToRadians(windToDeg));
+            double windY = windSpeedKnots.Value * Math.Sin(AnglesAndMeasurements.ConvertDegreesToRadians(windToDeg));
 
             double gsX = tasX + windX;
             double gsY = tasY + windY;
 
             return Math.Sqrt(gsX * gsX + gsY * gsY);
         }
+
+
+        /// <summary>
+        /// Converts True Airspeed (TAS) to Mach number at a given altitude and optional METAR data.
+        /// </summary>
+        /// <param name="tasKnots"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Mach number</returns>
         public static double TASToMach(double tasKnots, double altitudeMeters, MetarData? metar = null)
         {
             var atm = GetAtmosphere(altitudeMeters, metar);
@@ -110,7 +175,13 @@ namespace MCTUtils.Airspeed
 
 
 
-        // IAS
+        /// <summary>
+        /// Converts Indicated Airspeed (IAS) to True Airspeed (TAS) at a given altitude and optional METAR data.
+        /// </summary>
+        /// <param name="ias"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>True Airspeed in knots</returns>
         public static double IASToTAS(double ias, double altitudeMeters, MetarData? metar = null)
         {
             var atm = GetAtmosphere(altitudeMeters, metar);
@@ -120,6 +191,14 @@ namespace MCTUtils.Airspeed
 
             return EASToTAS(eas, atm);
         }
+
+
+        /// <summary>
+        /// Converts Indicated Airspeed (IAS) to Mach number at a given altitude.
+        /// </summary>
+        /// <param name="ias"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <returns>Mach number</returns>
         public static double IASToMach(double ias, double altitudeMeters)
         {
             return TASToMach(IASToTAS(ias, altitudeMeters), altitudeMeters);
@@ -127,7 +206,13 @@ namespace MCTUtils.Airspeed
 
 
 
-        // Mach
+        /// <summary>
+        /// Converts Mach number to True Airspeed (TAS) at a given altitude and optional METAR data.
+        /// </summary>
+        /// <param name="mach"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>True Airspeed in knots</returns>
         public static double MachToTAS(double mach, double altitudeMeters, MetarData? metar = null)
         {
             var atm = GetAtmosphere(altitudeMeters, metar);
@@ -136,10 +221,28 @@ namespace MCTUtils.Airspeed
 
             return mach * a * MpsToKts;
         }
+
+
+        /// <summary>
+        /// Converts Mach number to Indicated Airspeed (IAS) at a given altitude.
+        /// </summary>
+        /// <param name="mach"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <returns>Indicated Airspeed in knots</returns>
         public static double MachToIAS(double mach, double altitudeMeters)
         {
             return TASToIAS(MachToTAS(mach, altitudeMeters), altitudeMeters);
         }
+
+
+        /// <summary>
+        /// Converts Mach number to Ground Speed (GS) at a given altitude and optional METAR data.
+        /// </summary>
+        /// <param name="mach"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Ground Speed in knots</returns>
+        /// <exception cref="ArgumentException"></exception>
         public static double MachToGS(double mach, double altitudeMeters, MetarData? metar = null)
         {
             double tas = MachToTAS(mach, altitudeMeters, metar);
@@ -150,6 +253,16 @@ namespace MCTUtils.Airspeed
 
             throw new ArgumentException("Wind present: use overload with track");
         }
+
+
+        /// <summary>
+        /// Converts Mach number to Ground Speed (GS) at a given altitude, track, and optional METAR data.
+        /// </summary>
+        /// <param name="mach"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="trackDeg"></param>
+        /// <param name="metar"></param>
+        /// <returns>Ground Speed in knots</returns>
         public static double MachToGS(double mach, double altitudeMeters, double trackDeg, MetarData? metar)
         {
             if (metar?.WindSpeedKnots == null || metar?.WindDirectionDeg == null)
@@ -166,7 +279,14 @@ namespace MCTUtils.Airspeed
 
 
 
-        // GS
+        /// <summary>
+        /// Converts Ground Speed (GS) to True Airspeed (TAS) given the track, wind speed, and wind direction.
+        /// </summary>
+        /// <param name="gsKnots"></param>
+        /// <param name="trackDeg"></param>
+        /// <param name="windSpeedKnots"></param>
+        /// <param name="windDirDeg"></param>
+        /// <returns>True Airspeed in knots</returns>
         public static double GSToTAS(double gsKnots, double trackDeg, double? windSpeedKnots = null, double? windDirDeg = null)
         {
             // No wind -> TAS = GS
@@ -174,14 +294,14 @@ namespace MCTUtils.Airspeed
                 return gsKnots;
 
             // GS vector (track direction)
-            double gsX = gsKnots * Math.Cos(Angle.ConvertDegreesToRadians(trackDeg));
-            double gsY = gsKnots * Math.Sin(Angle.ConvertDegreesToRadians(trackDeg));
+            double gsX = gsKnots * Math.Cos(AnglesAndMeasurements.ConvertDegreesToRadians(trackDeg));
+            double gsY = gsKnots * Math.Sin(AnglesAndMeasurements.ConvertDegreesToRadians(trackDeg));
 
             // Convert wind "from - to" direction
             double windToDeg = (windDirDeg.Value + 180) % 360;
 
-            double windX = windSpeedKnots.Value * Math.Cos(Angle.ConvertDegreesToRadians(windToDeg));
-            double windY = windSpeedKnots.Value * Math.Sin(Angle.ConvertDegreesToRadians(windToDeg));
+            double windX = windSpeedKnots.Value * Math.Cos(AnglesAndMeasurements.ConvertDegreesToRadians(windToDeg));
+            double windY = windSpeedKnots.Value * Math.Sin(AnglesAndMeasurements.ConvertDegreesToRadians(windToDeg));
 
             // TAS = GS - wind
             double tasX = gsX - windX;
@@ -189,6 +309,15 @@ namespace MCTUtils.Airspeed
 
             return Math.Sqrt(tasX * tasX + tasY * tasY);
         }
+
+
+        /// <summary>
+        /// Converts Ground Speed (GS) to True Airspeed (TAS) given the track and optional METAR data.
+        /// </summary>
+        /// <param name="gsKnots"></param>
+        /// <param name="trackDeg"></param>
+        /// <param name="metar"></param>
+        /// <returns>True Airspeed in knots</returns>
         public static double GSToTAS(double gsKnots, double trackDeg, MetarData? metar = null)
         {
             if (metar?.WindSpeedKnots == null || metar?.WindDirectionDeg == null)
@@ -200,11 +329,31 @@ namespace MCTUtils.Airspeed
                 metar.WindSpeedKnots,
                 metar.WindDirectionDeg);
         }
+
+
+        /// <summary>
+        /// Converts Ground Speed (GS) to Indicated Airspeed (IAS) at a given altitude, track, and optional METAR data.
+        /// </summary>
+        /// <param name="gsKnots"></param>
+        /// <param name="trackDeg"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Indicated Airspeed in knots</returns>
         public static double GSToIAS(double gsKnots, double trackDeg, double altitudeMeters, MetarData? metar = null)
         {
             double tas = GSToTAS(gsKnots, trackDeg, metar);
             return TASToIAS(tas, altitudeMeters, metar);
         }
+
+
+        /// <summary>
+        /// Converts Ground Speed (GS) to Mach number at a given altitude, track, and optional METAR data.
+        /// </summary>
+        /// <param name="gsKnots"></param>
+        /// <param name="trackDeg"></param>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Mach number</returns>
         public static double GSToMach(double gsKnots, double trackDeg, double altitudeMeters, MetarData? metar = null)
         {
             double tas = GSToTAS(gsKnots, trackDeg, metar);
@@ -213,7 +362,12 @@ namespace MCTUtils.Airspeed
 
 
 
-
+        /// <summary>
+        /// Calculates the atmospheric state (temperature, pressure, density, pressure altitude, density altitude) at a given geometric altitude and optional METAR data.
+        /// </summary>
+        /// <param name="geometricAltitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns></returns>
         private static AtmosphereState GetAtmosphere(double geometricAltitudeMeters, MetarData? metar = null)
         {
             // 1 - Sea-level
@@ -257,6 +411,12 @@ namespace MCTUtils.Airspeed
         }
 
 
+        /// <summary>
+        /// Calculates the pressure altitude and density altitude at a given geometric altitude and optional METAR data.
+        /// </summary>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns>Tuple of pressure altitude and density altitude in meters</returns>
         public static (double pressureAlt, double densityAlt) GetAltitudes(double altitudeMeters, MetarData? metar = null)
         {
             var atm = GetAtmosphere(altitudeMeters, metar);
@@ -266,6 +426,14 @@ namespace MCTUtils.Airspeed
                 atm.DensityAltitudeMeters
             );
         }
+
+
+        /// <summary>
+        /// Calculates the temperature at a given geometric altitude and optional METAR data.
+        /// </summary>
+        /// <param name="altitudeMeters"></param>
+        /// <param name="metar"></param>
+        /// <returns></returns>
         private static double GetTemperature(double altitudeMeters, MetarData? metar = null)
         {
             if (metar?.TemperatureC != null)
@@ -345,16 +513,43 @@ namespace MCTUtils.Airspeed
     }
 
 
+    /// <summary>
+    /// Represents parsed METAR data, including wind direction, wind speed, temperature, and pressure.
+    /// </summary>
     public class MetarData
     {
+        /// <summary>
+        /// Wind direction in degrees (0-360). Null if not available.
+        /// </summary>
         public double? WindDirectionDeg { get; set; }
+
+        /// <summary>
+        /// Wind speed in knots. Null if not available.
+        /// </summary>
         public double? WindSpeedKnots { get; set; }
+
+        /// <summary>
+        /// Temperature in degrees Celsius. Null if not available.
+        /// </summary>
         public double? TemperatureC { get; set; }
+
+        /// <summary>
+        /// Pressure in hectopascals (hPa). Null if not available.
+        /// </summary>
         public double? PressureHPa { get; set; }
     }
 
-    public static class MetarParser
+    /// <summary>
+    /// Parses METAR strings to extract wind, temperature, and pressure information.
+    /// </summary>
+
+    public static partial class MetarParser
     {
+        /// <summary>
+        /// Parses a METAR string and returns a MetarData object containing wind direction, wind speed, temperature, and pressure.
+        /// </summary>
+        /// <param name="metar"></param>
+        /// <returns>MetarData object containing parsed information</returns>
         public static MetarData Parse(string metar)
         {
             var data = new MetarData();
@@ -363,7 +558,7 @@ namespace MCTUtils.Airspeed
                 return data;
 
             // Wind: 18015KT
-            var windMatch = Regex.Match(metar, @"(\d{3})(\d{2,3})KT");
+            var windMatch = WindMatchRegex().Match(metar);
             if (windMatch.Success)
             {
                 data.WindDirectionDeg = double.Parse(windMatch.Groups[1].Value);
@@ -371,21 +566,21 @@ namespace MCTUtils.Airspeed
             }
 
             // Temp/Dew: 15/08 or M05/M10
-            var tempMatch = Regex.Match(metar, @"(M?\d{2})/(M?\d{2})");
+            var tempMatch = TempDewRegex().Match(metar);
             if (tempMatch.Success)
             {
                 data.TemperatureC = ParseTemp(tempMatch.Groups[1].Value);
             }
 
             // Pressure QNH: Q1013
-            var qnhMatch = Regex.Match(metar, @"Q(\d{4})");
+            var qnhMatch = QnhMatchRegex().Match(metar);
             if (qnhMatch.Success)
             {
                 data.PressureHPa = double.Parse(qnhMatch.Groups[1].Value);
             }
 
             // Pressure inches: A2992
-            var altMatch = Regex.Match(metar, @"A(\d{4})");
+            var altMatch = AltMatchRegex().Match(metar);
             if (altMatch.Success)
             {
                 double inchesHg = double.Parse(altMatch.Groups[1].Value) / 100.0;
@@ -397,21 +592,55 @@ namespace MCTUtils.Airspeed
 
         private static double ParseTemp(string val)
         {
-            return val.StartsWith("M")
-                ? -double.Parse(val.Substring(1))
+            return val.StartsWith('M')
+                ? -double.Parse(val[1..])
                 : double.Parse(val);
         }
+
+        [GeneratedRegex(@"(\d{3})(\d{2,3})KT")]
+        private static partial Regex WindMatchRegex();
+        [GeneratedRegex(@"(M?\d{2})/(M?\d{2})")]
+        private static partial Regex TempDewRegex();
+        [GeneratedRegex(@"Q(\d{4})")]
+        private static partial Regex QnhMatchRegex();
+        [GeneratedRegex(@"A(\d{4})")]
+        private static partial Regex AltMatchRegex();
     }
 
+
+    /// <summary>
+    /// Represents the atmospheric state at a given altitude, including temperature, pressure, density, pressure altitude, density altitude, and delta ISA.
+    /// </summary>
     public class AtmosphereState
     {
+        /// <summary>
+        /// Temperature in Kelvin.
+        /// </summary>
         public double TemperatureK { get; set; }
+
+        /// <summary>
+        /// Pressure in Pascals.
+        /// </summary>
         public double PressurePa { get; set; }
+
+        /// <summary>
+        /// Density in kg/m^3.
+        /// </summary>
         public double Density { get; set; }
 
+        /// <summary>
+        /// Pressure altitude in meters.
+        /// </summary>
         public double PressureAltitudeMeters { get; set; }
+
+        /// <summary>
+        /// Density altitude in meters.
+        /// </summary>
         public double DensityAltitudeMeters { get; set; }
 
+        /// <summary>
+        /// Delta ISA (International Standard Atmosphere) temperature deviation in degrees Celsius.
+        /// </summary>
         public double DeltaISA { get; set; } // �C
     }
 }

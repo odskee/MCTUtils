@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCTUtils.Tacview
 {
+    /// <summary>
+    /// Provides methods for generating Tacview-compatible password hashes.
+    /// </summary>
     public static class TacviewHash
     {
         /// <summary>
@@ -40,6 +43,9 @@ namespace MCTUtils.Tacview
     }
 
 
+    /// <summary>
+    /// Provides a client for connecting to a Tacview Real Time Telemetry stream over TCP.
+    /// </summary>
     public class DCSRealTimeTelemetry : IAsyncDisposable
     {
         private string password = string.Empty;
@@ -55,7 +61,14 @@ namespace MCTUtils.Tacview
 
         private DateTime? connectedTimestamp = null;
 
+        /// <summary>
+        /// Event triggered when a line of telemetry data is received from the Tacview Real Time Telemetry stream.
+        /// </summary>
         public event Action<string>? LineReceivedEvent;
+
+        /// <summary>
+        /// Event triggered when the connection to the Tacview Real Time Telemetry stream is disconnected, either due to an error or a normal closure.
+        /// </summary>
         public event Action<Exception>? DisconnectedEvent;
 
 
@@ -81,6 +94,9 @@ namespace MCTUtils.Tacview
 
 
 
+        /// <summary>
+        /// Indicates whether the client is currently connected to the Tacview Real Time Telemetry stream.
+        /// </summary>
         public bool IsConnected => _tcp?.Connected ?? false;
 
 
@@ -89,15 +105,15 @@ namespace MCTUtils.Tacview
         /// Connects to the configured Tacview Real Time Telemetry source.  Configure the LineReceivedEvent and DisconnectedEvent events before connecting.
         /// </summary>
         /// <param name="token">Cancellation Token</param>
-        /// <exception cref="EventConfigurationMismatch">One or more events have not been configured</exception>
+        /// <exception cref="EventConfigurationMismatchException">One or more events have not been configured</exception>
         /// <returns></returns>
         public async Task ConnectToTelemetrySourceAsync(CancellationToken token = default)
         {
             if (LineReceivedEvent == null)
-                throw new EventConfigurationMismatch("LineReceivedEvent not configured");
+                throw new EventConfigurationMismatchException("LineReceivedEvent not configured");
 
             if (DisconnectedEvent == null)
-                throw new EventConfigurationMismatch("DisconnectedEvent not configured");
+                throw new EventConfigurationMismatchException("DisconnectedEvent not configured");
 
             _tcp = new TcpClient();
             await _tcp.ConnectAsync(host, port, token);
@@ -221,6 +237,10 @@ namespace MCTUtils.Tacview
             }
         }
 
+        /// <summary>
+        /// Disposes the client and closes the connection to the Tacview Real Time Telemetry stream.
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
             _cts?.Cancel();
