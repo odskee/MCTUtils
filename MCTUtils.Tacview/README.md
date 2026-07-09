@@ -1,5 +1,11 @@
 # MCTUtils.Tacview
 
+[![NuGet](https://img.shields.io/nuget/v/MCTUtils.Tacview.svg)](https://www.nuget.org/packages/MCTUtils.Tacview/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MCTUtils.Tacview.svg)](https://www.nuget.org/packages/MCTUtils.Tacview/)
+[![License](https://img.shields.io/github/license/Odskee/MCTUtils.Tacview)](LICENSE)
+
+<br />
+
 Tacview Real-Time Telemetry support for MCTUtils. Connects to Tacview telemetry streams, handles the handshake protocol, and provides real-time ACMI data.
 
 ```
@@ -9,7 +15,7 @@ dotnet add package MCTUtils.Tacview
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.2.6 |
+| **Version** | 0.3.0 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -133,9 +139,10 @@ catch (SocketException ex)
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 0.2.6 | Shared exceptions and types (ProjectReference) |
+| MCTUtils | 0.3.0 | Shared exceptions and types (ProjectReference) |
 | System.IO.Hashing | 8.0.0 | CRC32 hash computation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
 
 
 

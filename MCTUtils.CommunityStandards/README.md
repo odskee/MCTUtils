@@ -1,5 +1,11 @@
 # MCTUtils.CommunityStandards
 
+[![NuGet](https://img.shields.io/nuget/v/MCTUtils.CommunityStandards.svg)](https://www.nuget.org/packages/MCTUtils.CommunityStandards/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MCTUtils.CommunityStandards.svg)](https://www.nuget.org/packages/MCTUtils.CommunityStandards/)
+[![License](https://img.shields.io/github/license/Odskee/MCTUtils.CommunityStandards)](LICENSE)
+
+<br />
+
 Models, serialization, and validation for the MCT Community Standards schemas — Community Flight Plans and Operational Air Tasks used by the DCS milsim community.
 * Op Task Air - https://mctoolbox.uk/schema/v1.1.0/op-task-air.schema.json
 * Flight Plan - https://mctoolbox.uk/schema/v1.1.0/community-flightplan.schema.json
@@ -11,7 +17,7 @@ dotnet add package MCTUtils.CommunityStandards
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.2.6 |
+| **Version** | 0.3.0 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -718,9 +724,10 @@ var clone = opTaskAir.DeepClone();
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 0.2.6 | Shared types and serialization infrastructure (ProjectReference) |
+| MCTUtils | 0.3.0 | Shared types and serialization infrastructure (ProjectReference) |
 | JsonSchema.Net | 9.2.2 | JSON Schema evaluation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
 
 
 

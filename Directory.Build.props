@@ -2,15 +2,14 @@
 
   <PropertyGroup>
 
-    <Authors>Tom Bedford</Authors>
+    <Authors>Odskee</Authors>
     <Company>MCT</Company>
-    <Copyright>Copyright © Tom Bedford</Copyright>
 
     <RepositoryUrl>https://github.com/odskee/MCTUtils</RepositoryUrl>
     <RepositoryBranch>master</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
 
-    <Version>0.2.6</Version>
+    <Version>0.3.0</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -34,6 +33,7 @@
   </Target>
 
 </Project>
+
 
 
 
