@@ -30,6 +30,13 @@ public class FlightMember
     public string? PilotName { get; set; }
 
     /// <summary>
+    /// Identifies whether the flight member is currently controlled by a human
+    /// participant or by AI. Supersedes control_type at the asset level if supplied.
+    /// </summary>
+    [JsonPropertyName("control_type")]
+    public ControlType? ControlType { get; set; }
+
+    /// <summary>
     /// IFF transponder settings.
     /// </summary>
     [JsonPropertyName("transponder")]

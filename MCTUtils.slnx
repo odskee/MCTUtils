@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="MCTUtils\MCTUtils.csproj" />
+  <Project Path="MCTUtils.DCS\MCTUtils.DCS.csproj" />
   <Project Path="MCTUtils.Tacview\MCTUtils.Tacview.csproj" />
   <Project Path="MCTUtils.CommunityStandards\MCTUtils.CommunityStandards.csproj" />
   <Project Path="MCTUtils.Tests\MCTUtils.Tests.csproj" />

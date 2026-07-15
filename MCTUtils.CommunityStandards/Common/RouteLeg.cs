@@ -26,12 +26,12 @@ public class RouteLeg
     /// <summary>
     /// ICAO Compliant Flight Rules value. Overrides Asset level value for this leg only.
     /// </summary>
-    [JsonPropertyName("flightRules")]
+    [JsonPropertyName("flight_rules")]
     public FlightRules? FlightRules { get; set; }
 
     /// <summary>
     /// Flight environment visibility. Overrides Asset level value for this leg only.
     /// </summary>
-    [JsonPropertyName("flightOversight")]
+    [JsonPropertyName("flight_oversight")]
     public FlightOversight? FlightOversight { get; set; }
 }

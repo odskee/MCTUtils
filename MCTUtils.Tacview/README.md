@@ -15,7 +15,7 @@ dotnet add package MCTUtils.Tacview
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.3.2 |
+| **Version** | 1.0.0 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -139,9 +139,14 @@ catch (SocketException ex)
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 0.3.2 | Shared exceptions and types (ProjectReference) |
+| MCTUtils | 1.0.0 | Shared exceptions and types (ProjectReference) |
 | System.IO.Hashing | 8.0.0 | CRC32 hash computation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
+
+
+
+
 
 
 

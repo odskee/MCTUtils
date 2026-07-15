@@ -1,7 +1,16 @@
+using System.Collections.Concurrent;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
 namespace MCTUtils;
 
 public static class MCTExtensions
 {
+    private static readonly ConcurrentDictionary<Enum, string> _enumToString = new();
+    private static readonly ConcurrentDictionary<Type, Dictionary<string, object>> _stringToEnum = new();
+
+
+
     /// <summary>
     /// Converts the first character of a string to uppercase.
     /// </summary>
@@ -78,4 +87,66 @@ public static class MCTExtensions
         return copy.GetRange(0, number);
     }
 
+    /// <summary>
+    /// Gets the display name for an enum value using its <see cref="DisplayAttribute"/>,
+    /// or the member name if no attribute is present. Results are cached in a
+    /// <see cref="ConcurrentDictionary{TKey, TValue}"/> for performance.
+    /// </summary>
+    /// <param name="value">The enum value to convert.</param>
+    /// <returns>The display name, or the member name if no <c>[Display]</c> attribute exists.</returns>
+    public static string ToString(Enum value)
+    {
+        return _enumToString.GetOrAdd(value, e =>
+        {
+            var fieldInfo = e.GetType().GetField(e.ToString());
+
+            var displayAttributes = fieldInfo?.GetCustomAttributes(
+                typeof(DisplayAttribute), false) as DisplayAttribute[];
+
+            if (displayAttributes == null || displayAttributes.Length == 0)
+                return e.ToString();
+
+            return displayAttributes[0].Name ?? e.ToString();
+        });
+    }
+
+    /// <summary>
+    /// Parses a display name string back to its enum value using <see cref="DisplayAttribute"/>.
+    /// The lookup is case-insensitive and results are cached in a
+    /// <see cref="ConcurrentDictionary{TKey, TValue}"/> for performance.
+    /// </summary>
+    /// <typeparam name="T">The enum type to parse into.</typeparam>
+    /// <param name="value">The display name to parse.</param>
+    /// <returns>The matching enum value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="value"/> does not match any member's display name or member name.</exception>
+    public static T FromString<T>(string value) where T : struct, Enum
+    {
+        var lookup = _stringToEnum.GetOrAdd(typeof(T), type =>
+        {
+            var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var enumValue = field.GetValue(null)!;
+
+                var displayAttributes = field.GetCustomAttributes(
+                    typeof(DisplayAttribute), false) as DisplayAttribute[];
+
+                var displayName = (displayAttributes != null && displayAttributes.Length > 0)
+                    ? displayAttributes[0].Name
+                    : field.Name;
+
+                dict[displayName!] = enumValue;
+            }
+
+            return dict;
+        });
+
+        if (lookup.TryGetValue(value, out var result))
+            return (T)result;
+
+        throw new ArgumentException(
+            $"'{value}' is not a valid display value for enum {typeof(T).Name}.",
+            nameof(value));
+    }
 }

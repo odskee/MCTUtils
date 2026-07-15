@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace MCTUtils.Exceptions
+namespace MCTUtils.Tacview
 {
     public class EventConfigurationMismatchException : Exception
     {

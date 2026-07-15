@@ -6,7 +6,7 @@
 
 <br />
 
-A Core library for the MCTUtils .NET toolkit — geographic utilities, airspeed conversion, Lua table parsing, DCS terrain projection, and shared types for flight simulation tooling.
+A Core library for the MCTUtils .NET toolkit — geographic utilities, airspeed conversion, Lua table parsing, and shared types for flight simulation tooling.
 
 ```
 dotnet add package MCTUtils
@@ -15,7 +15,7 @@ dotnet add package MCTUtils
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.3.2 |
+| **Version** | 1.0.0 |
 | **License** | [LICENSE](LICENSE) |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -28,23 +28,22 @@ dotnet add package MCTUtils
 ```
 MCTUtils
 ├── Airspeed      Airspeed conversion (IAS, CAS, EAS, TAS, Mach, GS), METAR parsing
-├── DCS           DCS World coordinate projection (Vec2/Vec3 → lat/lon)
-├── Extensions    Extension methods: TruncateTo, SelectRandom, FirstCharToUpper
+├── Extensions    Extension methods: TruncateTo, SelectRandom, FirstCharToUpper, Enum helpers
 ├── Geo           Angle/unit conversion, barycentric, distance, FuelType
 ├── Lua           Lua table → JSON conversion
 ├── Utilities     File name sanitizer, NATO phonetics, GPX navaid parser
-├── Internal.Geo  BasicCoordinate, BarryPoint
-├── Internal.DCS  Vec2, Vec3, TheatreTranslation
-└── Exceptions    EventConfigurationMismatchException, MissingTheatreTranslationException, PasswordNotAcceptedException
+└── Internal.Geo  BasicCoordinate, BarryPoint
 ```
 
 ---
 
 ## MCTUtils.Extensions
 
-Extension methods directly on `string`, `double`, and `List<T>` — available by importing the `MCTUtils` namespace.
+Extension and utility methods on `string`, `double`, `List<T>`, and `Enum` — available by importing the `MCTUtils` namespace.
 
 ### `MCTExtensions` (static)
+
+**Extension methods:**
 
 | Method | Return | Description |
 |--------|--------|-------------|
@@ -53,8 +52,18 @@ Extension methods directly on `string`, `double`, and `List<T>` — available by
 | `FirstCharToUpper(this string input)` | `string` | Capitalises first character (`"hello"` → `"Hello"`) |
 | `SelectRandom<T>(this List<T> input, int number)` | `List<T>` | Selects N random elements without replacement (partial Fisher-Yates shuffle) |
 
+**Enum utility methods:**
+
+| Method | Return | Description |
+|--------|--------|-------------|
+| `ToString(Enum value)` | `string` | Gets the `[Display]` attribute name for an enum value, or the member name if none — cached |
+| `FromString<T>(string value)` | `T` | Parses a `[Display]` attribute name (or member name) back to an enum value, case-insensitive — cached |
+
+**Constraints:** `T` must be `struct, Enum` on `FromString<T>`.
+
 ```csharp
 using MCTUtils;
+using System.ComponentModel.DataAnnotations;
 
 // TruncateTo — no rounding
 double precise = 3.1415926535;
@@ -67,6 +76,11 @@ string name = "viper".FirstCharToUpper();  // "Viper"
 // SelectRandom — no replacement
 var flights = new List<string> { "Viper 1", "Viper 2", "Viper 3", "Viper 4" };
 List<string> selected = flights.SelectRandom(2);  // e.g. ["Viper 2", "Viper 4"]
+
+// Enum display name — uses [Display(Name = "...")]
+enum MissionType { [Display(Name = "CAP")] Cap, [Display(Name = "SEAD")] Sead }
+string display = MCTExtensions.ToString(MissionType.Cap);  // "CAP"
+MissionType parsed = MCTExtensions.FromString<MissionType>("SEAD");  // MissionType.Sead
 ```
 
 ---
@@ -216,100 +230,6 @@ string json = LuaTableToJson.Convert(lua);
 
 ---
 
-## MCTUtils.DCS
-
-### `DCSEnvironment` (class)
-
-Bidirectional coordinate conversion between DCS World in-game coordinates (Vec2/Vec3) and decimal-degree latitude/longitude, using theatre-specific Transverse Mercator projection parameters. Projection is configured once via the constructor and both directions are immediately available.
-
-| Constructor | Description |
-|-------------|-------------|
-| `DCSEnvironment(TheatreTranslation translation)` | Initialises with theatre projection parameters — prepares both geo→DCS and DCS→geo transforms |
-
-| Method | Return | Description |
-|--------|--------|-------------|
-| `DecimalDegreesToDCSVec2(Coordinate coordinate)` | `Vec2` | Lat/lon → DCS Vec2 (takes `Proj4Net.Core.Coordinate`) |
-| `DCSVec2ToDecimalDegrees(Vec2 dcsVec2)` | `BasicCoordinate` | DCS Vec2 → lat/lon |
-| `DCSVec3ToDecimalDegrees(Vec3 dcsVec3)` | `BasicCoordinate` | DCS Vec3 → lat/lon |
-| `DCSProjectionString(int centralMeridian, double scaleFactor, double falseEasting, double falseNorthing)` | `string` | Generates Proj4 projection string for the configured theatre |
-
-#### DCS Example
-
-```csharp
-using MCTUtils.DCS;
-using MCTUtils.Internal.DCS;
-using Proj4Net.Core;
-
-var env = new DCSEnvironment(new TheatreTranslation
-{
-    Central_meridian = 147,
-    False_northing = -1491840.000000048,
-    False_easting = 238417.99999989968,
-    Scale_factor = 0.9996
-});
-
-// DCS → lat/lon
-var coord = env.DCSVec2ToDecimalDegrees(new Vec2(13056.832576364, 10030.962119321));    // BasicCoordinate(){ Latitude=13.576672104045052, Longitude=144.91731189173802 }
-
-// lat/lon → DCS
-var dcsVec = env.DecimalDegreesToDCSVec2(new Coordinate(13.576672104045052, 144.91731189173802));   // Vec2(){ X=13056.832576364, Y=10030.962119321 }
-```
-
----
-
-## MCTUtils.Internal.DCS
-
-### `IVec2` (interface)
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `X` | `double` | X coordinate |
-| `Y` | `double` | Y coordinate |
-
-### `Vec2` (class, implements `IVec2`)
-
-| Constructor | Description |
-|-------------|-------------|
-| `Vec2()` | Default (0, 0) |
-| `Vec2(double x, double y)` | From coordinates |
-| `Vec2(Vec3 dcsVec3)` | From Vec3 (drops Z) |
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `X` | `double` | X coordinate |
-| `Y` | `double` | Y coordinate |
-
-### `IVec3` (interface, extends `IVec2`)
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `Z` | `double` | Z coordinate |
-
-### `Vec3` (class, extends `Vec2`, implements `IVec3`)
-
-| Constructor | Description |
-|-------------|-------------|
-| `Vec3()` | Default (0, 0, 0) |
-| `Vec3(double x, double y, double z)` | From coordinates |
-| `Vec3(Vec2 dcsVec2)` | From Vec2 (Z = 0) |
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `Z` | `double` | Z coordinate |
-
-### `TheatreTranslation` (class)
-
-DCS theatre projection parameters.
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `Central_meridian` | `int` | 0 | Central meridian (lon₀) |
-| `False_easting` | `double` | 0 | False easting (x₀) |
-| `False_northing` | `double` | 0 | False northing (y₀) |
-| `Scale_factor` | `double` | 0 | Scale factor (k₀) |
-
----
-
 ## MCTUtils.Internal.Geo
 
 ### `IBasicCoordinate` (interface)
@@ -436,21 +356,10 @@ VOR, VORDME, VORTAC, TACAN, DME, NDB, NDBDME, VOT, Radar
 
 ---
 
-## MCTUtils.Exceptions
-
-| Exception | Inherits | Description |
-|-----------|----------|-------------|
-| `EventConfigurationMismatchException` | `Exception` | Events not configured before connecting |
-| `MissingTheatreTranslationException` | `Exception` | Theatre translation not set |
-| `PasswordNotAcceptedException` | `Exception` | Tacview handshake rejected |
-
----
-
 ## Dependencies
 
 | Package | Version | Used by |
 |---------|---------|---------|
-| Proj4Net.Core | 1.25.1501 | DCS coordinate projection |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
 
 ---
@@ -459,9 +368,15 @@ VOR, VORDME, VORTAC, TACAN, DME, NDB, NDBDME, VOT, Radar
 
 | Package | Description |
 |---------|-------------|
-| `MCTUtils` | Core library — geo, airspeed, Lua, DCS terrain, utilities, GPX parsing |
+| `MCTUtils` | Core library — geo, airspeed, Lua, utilities, GPX parsing |
+| `MCTUtils.DCS` | DCS World terrain projection and coordinate types |
 | `MCTUtils.Tacview` | Tacview Real-Time Telemetry client and protocol helpers |
 | `MCTUtils.CommunityStandards` | Community Flight Plan & Op Task Air schemas |
+
+
+
+
+
 
 
 

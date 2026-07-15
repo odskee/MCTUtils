@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace MCTUtils.Geo;
 
-public enum FuelType
+public enum FuelWeight
 {
     /// <summary>
     /// Jet A-1 fuel type.
@@ -107,14 +107,14 @@ public static class AnglesAndMeasurements
     /// <param name="tons"></param>
     /// <param name="fuelType"></param>
     /// <returns>litres</returns>
-    public static double TonsToLitres(int tons, FuelType fuelType)
+    public static double TonsToLitres(int tons, FuelWeight fuelType)
     {
         return fuelType switch
         {
-            FuelType.JetFuel => tons * 1000 / 0.840,
-            FuelType.Diesel => tons * 1000 / 0.845,
-            FuelType.Gasoline => tons * 1000 / 0.775,
-            FuelType.Methanol => tons * 1000 / 0.792,
+            FuelWeight.JetFuel => tons * 1000 / 0.840,
+            FuelWeight.Diesel => tons * 1000 / 0.845,
+            FuelWeight.Gasoline => tons * 1000 / 0.775,
+            FuelWeight.Methanol => tons * 1000 / 0.792,
             _ => 0,
         };
     }

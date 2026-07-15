@@ -37,7 +37,7 @@ public class SerializationTests
     {
         var plan = new FlightPlanDocument
         {
-            SchemaVersion = "1.1.0",
+            SchemaVersion = "2.0.0",
             Id = Guid.NewGuid(),
             CreatedAt = DateTimeOffset.UtcNow,
             Coalition = Coalition.BLUE
@@ -66,7 +66,7 @@ public class SerializationTests
     {
         var opTaskAir = new OpTaskAirDocument
         {
-            SchemaVersion = "1.1.0",
+            SchemaVersion = "2.0.0",
             Id = Guid.NewGuid(),
             CreatedAt = DateTimeOffset.UtcNow,
             Coalition = Coalition.RED,
@@ -136,7 +136,7 @@ public class SerializationTests
     {
         var plan = new FlightPlanDocument
         {
-            SchemaVersion = "1.1.0",
+            SchemaVersion = "2.0.0",
             Id = Guid.NewGuid(),
             CreatedAt = DateTimeOffset.UtcNow,
             Coalition = Coalition.BLUE

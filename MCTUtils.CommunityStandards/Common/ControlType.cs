@@ -2,7 +2,9 @@
 
 public enum ControlType
 {
-    HUMAN,
+    [EnumMember(Value = "Human")]
+    Human,
     AI,
-    UNKNOWN
+    [EnumMember(Value = "Unknown")]
+    Unknown
 }

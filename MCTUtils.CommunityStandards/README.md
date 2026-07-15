@@ -7,8 +7,8 @@
 <br />
 
 Models, serialization, and validation for the MCT Community Standards schemas — Community Flight Plans and Operational Air Tasks used by the DCS milsim community.
-* Op Task Air - https://mctoolbox.uk/schema/v1.1.0/op-task-air.schema.json
-* Flight Plan - https://mctoolbox.uk/schema/v1.1.0/community-flightplan.schema.json
+* Op Task Air - https://mctoolbox.uk/schema/v2.0.0/op-task-air.schema.json
+* Flight Plan - https://mctoolbox.uk/schema/v2.0.0/community-flightplan.schema.json
 
 ```
 dotnet add package MCTUtils.CommunityStandards
@@ -17,7 +17,7 @@ dotnet add package MCTUtils.CommunityStandards
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 0.3.2 |
+| **Version** | 1.0.0 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -90,7 +90,7 @@ All enums use `[EnumMember(Value = "...")]` attributes where JSON values differ 
 
 ### `WaypointType`
 
-`DEPARTURE`, `ARRIVAL`, `DIVERT`, `TURNAROUND`, `FLYOVER`, `FLYBY`, `MARKPOINT`, `PUSH`, `IP`, `EGRESS`, `HOLDING`, `REFUEL`, `HAZZARD`, `BINGO`, `BULLSEYE`, `CP`, `TGT`, `FENCE_IN`, `FENCE_OUT`, `CUSTOM`
+`DEPARTURE`, `ARRIVAL`, `DIVERT`, `TURNAROUND`, `FLYOVER`, `FLYBY`, `MARKPOINT`, `PUSH`, `IP`, `EGRESS`, `HOLDING`, `REFUEL`, `HAZARD`, `BINGO`, `BULLSEYE`, `CP`, `TGT`, `FENCE_IN`, `FENCE_OUT`, `CUSTOM`
 
 ### `FlightRules`
 
@@ -204,6 +204,7 @@ Annotated with `[JsonObjectCreationHandling(Populate)]` — getter-only collecti
 | `FromJson(string json)` | `CommunityFlightPlan` | Deserialize from JSON string |
 | `Load(string path)` | `CommunityFlightPlan` | Load from file |
 | `Save(string path, bool writeIndented)` | `void` | Save to file |
+| `IsValid(string schema)` | `ValidationResult` | Validate against a provided JSON schema string (synchronous) |
 
 ### `OpTaskAir` (`MCTUtils.CommunityStandards.OpTaskAir`)
 
@@ -235,6 +236,7 @@ Annotated with `[JsonObjectCreationHandling(Populate)]`.
 | `FromJson(string json)` | `OpTaskAir` | Deserialize from JSON |
 | `Load(string path)` | `OpTaskAir` | Load from file |
 | `Save(string path, bool writeIndented)` | `void` | Save to file |
+| `IsValid(string schema)` | `ValidationResult` | Validate against a provided JSON schema string (synchronous) |
 
 ### `Package`
 
@@ -564,9 +566,9 @@ A `JsonConverterFactory` that serializes enums using `[EnumMember(Value = "...")
 
 | Field | Value |
 |-------|-------|
-| `CurrentVersion` | `"1.1.0"` |
-| `CommunityFlightPlanSchemaUrl` | `"https://mctoolbox.uk/schema/v1.1.0/community-flightplan.schema.json"` |
-| `OpTaskAirSchemaUrl` | `"https://mctoolbox.uk/schema/v1.1.0/op-task-air.schema.json"` |
+| `CurrentVersion` | `"2.0.0"` |
+| `CommunityFlightPlanSchemaUrl` | `"https://mctoolbox.uk/schema/v2.0.0/community-flightplan.schema.json"` |
+| `OpTaskAirSchemaUrl` | `"https://mctoolbox.uk/schema/v2.0.0/op-task-air.schema.json"` |
 
 ---
 
@@ -615,7 +617,8 @@ Extension methods for `CommunityFlightPlan`.
 |--------|--------|-------------|
 | `DeepClone(this CommunityFlightPlan)` | `CommunityFlightPlan` | Deep clone via JSON round-trip |
 | `Copy(this CommunityFlightPlan)` | `CommunityFlightPlan` | Same as DeepClone |
-| `IsValid(this CommunityFlightPlan)` | `Task<ValidationResult>` | Validate against published schema |
+| `IsValid(this CommunityFlightPlan)` | `Task<ValidationResult>` | Validate against the published schema URL (async) |
+| `IsValid(string schema)` *(instance)* | `ValidationResult` | Validate against a provided JSON schema string (synchronous) |
 
 ### `OpTaskAirExtensions` (static)
 
@@ -625,7 +628,8 @@ Extension methods for `OpTaskAir`.
 |--------|--------|-------------|
 | `DeepClone(this OpTaskAir)` | `OpTaskAir` | Deep clone via JSON round-trip |
 | `Copy(this OpTaskAir)` | `OpTaskAir` | Same as DeepClone |
-| `IsValid(this OpTaskAir)` | `Task<ValidationResult>` | Validate against published schema |
+| `IsValid(this OpTaskAir)` | `Task<ValidationResult>` | Validate against the published schema URL (async) |
+| `IsValid(string schema)` *(instance)* | `ValidationResult` | Validate against a provided JSON schema string (synchronous) |
 
 ---
 
@@ -639,7 +643,7 @@ using FlightPlan = MCTUtils.CommunityStandards.CommunityFlightPlan.CommunityFlig
 
 var plan = new FlightPlan
 {
-    SchemaVersion = "1.1.0",
+    SchemaVersion = "2.0.0",
     Id = Guid.NewGuid(),
     CreatedAt = DateTimeOffset.UtcNow,
     Coalition = Coalition.BLUE
@@ -660,11 +664,15 @@ var clone = plan.DeepClone();
 plan.Save("flightplan.json", writeIndented: true);
 var fromFile = FlightPlan.Load("flightplan.json");
 
-// Validate
+// Validate against published schema (async)
 var result = await plan.IsValid();
 if (!result.IsValid)
     foreach (var error in result.Errors)
         Console.WriteLine($"[{error.Path}] {error.Message}");
+
+// Validate against a custom schema string (synchronous)
+string customSchema = "{\"type\": \"object\", \"properties\": {...}}";
+var localResult = plan.IsValid(customSchema);
 ```
 
 ### Op Task Air with Weather
@@ -676,7 +684,7 @@ using MCTUtils.CommunityStandards.OpTaskAir;
 
 var opTaskAir = new OpTaskAirDoc
 {
-    SchemaVersion = "1.1.0",
+    SchemaVersion = "2.0.0",
     Id = Guid.NewGuid(),
     CreatedAt = DateTimeOffset.UtcNow,
     Coalition = Coalition.RED,
@@ -716,6 +724,16 @@ opTaskAir.Assets.Add(new Asset
 string json = opTaskAir.ToJson(writeIndented: true);
 var loaded = OpTaskAirDoc.FromJson(json);
 var clone = opTaskAir.DeepClone();
+
+// Validate against published schema (async)
+var result = await opTaskAir.IsValid();
+if (!result.IsValid)
+    foreach (var error in result.Errors)
+        Console.WriteLine($"[{error.Path}] {error.Message}");
+
+// Validate against a custom schema string (synchronous)
+string customSchema = "{\"type\": \"object\", \"properties\": {...}}";
+var localResult = opTaskAir.IsValid(customSchema);
 ```
 
 ---
@@ -724,9 +742,14 @@ var clone = opTaskAir.DeepClone();
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 0.3.2 | Shared types and serialization infrastructure (ProjectReference) |
+| MCTUtils | 1.0.0 | Shared types and serialization infrastructure (ProjectReference) |
 | JsonSchema.Net | 9.2.2 | JSON Schema evaluation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
+
+
+
+
 
 
 

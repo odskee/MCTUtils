@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using MCTUtils.CommunityStandards.Common;
 using MCTUtils.CommunityStandards.Serialization;
+using MCTUtils.CommunityStandards.Validation;
 
 /// <summary>
 /// Community standard schema for simulated military themes flight plans.
@@ -125,5 +126,17 @@ public class CommunityFlightPlan
     {
         var options = JsonSerializerOptionsFactory.Create(writeIndented);
         return JsonSerializer.Serialize(this, options);
+    }
+
+    /// <summary>
+    /// Validates this flight plan against the specified JSON schema.
+    /// </summary>
+    /// <param name="schema">The JSON schema text to validate against.</param>
+    /// <returns>A <see cref="ValidationResult"/> containing any errors found.</returns>
+    public ValidationResult IsValid(string schema)
+    {
+        var json = ToJson();
+        var validator = new JsonSchemaValidator();
+        return validator.Validate(json, schema);
     }
 }

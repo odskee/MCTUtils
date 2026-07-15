@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,25 +6,30 @@
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
-    <PackageId>MCTUtils</PackageId>
-    <Title>MCTUtils</Title>
-    <Description>Core library for MCTUtils — a .NET toolkit for military and civilian flight simulation software. Provides geographic utilities, airspeed conversion, Lua table parsing, and DCS terrain support. Extend with MCTUtils.Tacview and MCTUtils.CommunityStandards.</Description>
+    <PackageId>MCTUtils.DCS</PackageId>
+    <Title>MCTUtils.DCS</Title>
+    <Description>DCS World terrain projection and coordinate types for MCTUtils. Provides bidirectional coordinate conversion between DCS in-game coordinates (Vec2/Vec3) and decimal-degree latitude/longitude using theatre-specific Transverse Mercator projection.</Description>
     <NeutralLanguage>en-GB</NeutralLanguage>
-    <PackageTags>DCS, Flightsim, Lua, Airspeed, Geo, Aviation</PackageTags>
+    <PackageTags>DCS, Flightsim, Coordinate, Projection, Geo</PackageTags>
     <PackageProjectUrl>https://github.com/odskee/MCTUtils</PackageProjectUrl>
 
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <PackageReleaseNotes>
-Initial public release.
+Initial release — extracted from MCTUtils core.
     </PackageReleaseNotes>
 
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Proj4Net.Core" Version="1.25.1501" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.*" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MCTUtils\MCTUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
