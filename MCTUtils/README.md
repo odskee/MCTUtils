@@ -4,9 +4,10 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/MCTUtils.svg)](https://www.nuget.org/packages/MCTUtils/)
 [![License](https://img.shields.io/github/license/Odskee/MCTUtils)](LICENSE)
 
-<br />
 
 A Core library for the MCTUtils .NET toolkit — geographic utilities, airspeed conversion, Lua table parsing, and shared types for flight simulation tooling.
+
+*This library is NOT suitable for use in software involved with the planning, execution or analysis or real-world military or civilian operations.*
 
 ```
 dotnet add package MCTUtils
@@ -15,7 +16,7 @@ dotnet add package MCTUtils
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **License** | [LICENSE](LICENSE) |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -372,6 +373,7 @@ VOR, VORDME, VORTAC, TACAN, DME, NDB, NDBDME, VOT, Radar
 | `MCTUtils.DCS` | DCS World terrain projection and coordinate types |
 | `MCTUtils.Tacview` | Tacview Real-Time Telemetry client and protocol helpers |
 | `MCTUtils.CommunityStandards` | Community Flight Plan & Op Task Air schemas |
+
 
 
 

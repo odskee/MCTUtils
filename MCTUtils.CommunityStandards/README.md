@@ -4,11 +4,13 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/MCTUtils.CommunityStandards.svg)](https://www.nuget.org/packages/MCTUtils.CommunityStandards/)
 [![License](https://img.shields.io/github/license/Odskee/MCTUtils.CommunityStandards)](LICENSE)
 
-<br />
 
 Models, serialization, and validation for the MCT Community Standards schemas — Community Flight Plans and Operational Air Tasks used by the DCS milsim community.
 * Op Task Air - https://mctoolbox.uk/schema/v2.0.0/op-task-air.schema.json
 * Flight Plan - https://mctoolbox.uk/schema/v2.0.0/community-flightplan.schema.json
+
+
+*This library is NOT suitable for use in software involved with the planning, execution or analysis or real-world military or civilian operations.*
 
 ```
 dotnet add package MCTUtils.CommunityStandards
@@ -17,7 +19,7 @@ dotnet add package MCTUtils.CommunityStandards
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Dependency** | MCTUtils (core) — added automatically |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -139,7 +141,7 @@ All enums use `[EnumMember(Value = "...")]` attributes where JSON values differ 
 
 ### `FuelType`
 
-`JP4`, `JP5`, `JP8`, `AVGAS`
+`JetA`, `F-34`, `F-44`, `Other`, `JP4`, `JP5`, `JP8`, `AVGAS`
 
 ### `SurfaceType`
 
@@ -742,9 +744,10 @@ var localResult = opTaskAir.IsValid(customSchema);
 
 | Package | Version | Usage |
 |---------|---------|-------|
-| MCTUtils | 1.0.0 | Shared types and serialization infrastructure (ProjectReference) |
+| MCTUtils | 1.0.1 | Shared types and serialization infrastructure (ProjectReference) |
 | JsonSchema.Net | 9.2.2 | JSON Schema evaluation |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
 
 
 

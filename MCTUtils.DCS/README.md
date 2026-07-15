@@ -4,9 +4,10 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/MCTUtils.DCS.svg)](https://www.nuget.org/packages/MCTUtils.DCS/)
 [![License](https://img.shields.io/github/license/Odskee/MCTUtils)](LICENSE)
 
-<br />
 
 DCS World terrain projection and coordinate types for MCTUtils. Provides bidirectional coordinate conversion between DCS in-game coordinates (Vec2/Vec3) and decimal-degree latitude/longitude, using theatre-specific Transverse Mercator projection parameters.
+
+*This library is NOT suitable for use in software involved with the planning, execution or analysis or real-world military or civilian operations.*
 
 ```
 dotnet add package MCTUtils.DCS
@@ -15,7 +16,7 @@ dotnet add package MCTUtils.DCS
 | | |
 |---|---|
 | **Target** | .NET 8 |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **License** | [LICENSE](LICENSE) |
 | **Repository** | [github.com/odskee/MCTUtils](https://github.com/odskee/MCTUtils) |
 | **IntelliSense** | Full XML docs for all public APIs |
@@ -136,4 +137,5 @@ DCS theatre projection parameters.
 | Proj4Net.Core | 1.25.1501 | DCS coordinate projection |
 | MCTUtils | — | `BasicCoordinate`, `BarryPoint` shared types |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+
 
