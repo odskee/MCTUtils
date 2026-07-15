@@ -136,3 +136,4 @@ DCS theatre projection parameters.
 | Proj4Net.Core | 1.25.1501 | DCS coordinate projection |
 | MCTUtils | — | `BasicCoordinate`, `BarryPoint` shared types |
 | Microsoft.SourceLink.GitHub | 8.x | Source-level debugging (PrivateAssets) |
+

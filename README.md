@@ -11,6 +11,9 @@ MCTUtils is a parent library, containing a number of commonly used converters an
 ### MCTTUtils
 See https://github.com/odskee/MCTUtils/tree/master/MCTUtils for more information.
 
+### MCTUtils.DCS
+See https://github.com/odskee/MCTUtils/tree/master/MCTUtils.DCS for more information
+
 ### MCTUtils.Tacview
 See https://github.com/odskee/MCTUtils/tree/master/MCTUtils.Tacview for more information
 
