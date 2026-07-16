@@ -11,12 +11,14 @@ Milsim Community Tools & Utils - This is a collection of tools and utilities to 
 MCTUtils is a parent library, containing a number of commonly used converters and processors.  Additional / optional libraries that depend on MCTUtils are available such as MCTUtils.Tacview.
 
  -  MCTTUtils - https://github.com/odskee/MCTUtils/tree/master/MCTUtils
-<br />
  - MCTUtils.DCS - https://github.com/odskee/MCTUtils/tree/master/MCTUtils.DCS
-<br />
  - MCTUtils.Tacview - https://github.com/odskee/MCTUtils/tree/master/MCTUtils.Tacview
-<br />
  - MCTUtils.CommunityStandards - https://github.com/odskee/MCTUtils/tree/master/MCTUtils.CommunityStandards
+
+ <br />
+
+## v.1.0.1
+* Added enum values
 
 
 <br />
